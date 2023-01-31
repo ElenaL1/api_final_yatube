@@ -15,6 +15,5 @@ router_api_v1.register('groups', GroupViewSet, basename='groups')
 
 urlpatterns = [
     path('v1/', include(router_api_v1.urls)),
-    path('v1/', include('djoser.urls')),
     path('v1/', include('djoser.urls.jwt')),
 ]

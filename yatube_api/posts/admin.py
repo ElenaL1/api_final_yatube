@@ -11,6 +11,11 @@ class PostAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
 
 
+class FollowAdmin(admin.ModelAdmin):
+    list_display = ('user', 'following')
+    list_editable = ('user', 'following')
+
+
 admin.site.register(Post, PostAdmin)
 admin.site.register(Group)
 admin.site.register(Follow)

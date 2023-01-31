@@ -1,5 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.db.models import CheckConstraint, F, Q, UniqueConstraint
+
 
 User = get_user_model()
 
@@ -19,7 +21,7 @@ class Post(models.Model):
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='posts')
     image = models.ImageField(
-        upload_to='posts/', null=True, blank=True)
+        upload_to='posts/', blank=True)
     group = models.ForeignKey(
         Group, on_delete=models.SET_NULL, verbose_name='группа',
         related_name='posts', blank=True, null=True
@@ -52,10 +54,13 @@ class Follow(models.Model):
         verbose_name="автор поста", related_name="author")
 
     class Meta:
-        verbose_name = "комментарий"
-        verbose_name_plural = "комментарии"
+        verbose_name = "подписка"
+        verbose_name_plural = "подписки"
         constraints = [
-            models.UniqueConstraint(
+            UniqueConstraint(
                 fields=['user', 'following'],
-                name='unique_user_following')
+                name='unique_user_following'),
+            CheckConstraint(
+                check=~Q(user=F('following')),
+                name='unique_following')
         ]
